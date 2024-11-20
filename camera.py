@@ -13,6 +13,41 @@ class Camera:
         self.v_fov = self.h_fov * (render.HEIGHT / render.WIDTH)
         self.near_plane = 0.1
         self.far_plane = 100
+        self.moving_speed = 0.02
+        self.rotation_speed = 0.001
+    
+    def control(self):
+        key = pg.key.get_pressed()
+        if key[pg.K_a]:
+            self.position += self.right * self.moving_speed
+        if key[pg.K_d]:
+            self.position -= self.right * self.moving_speed
+        if key[pg.K_w]:
+            self.position -= self.up * self.moving_speed
+        if key[pg.K_s]:
+            self.position += self.up * self.moving_speed
+
+        if key[pg.K_q]:
+            self.camera_hori(self.rotation_speed)
+        if key[pg.K_e]:
+            self.camera_hori(-self.rotation_speed)
+        if key[pg.K_UP]:
+            self.camera_vert(+self.rotation_speed)
+        if key[pg.K_DOWN]:
+            self.camera_vert(-self.rotation_speed)
+    
+    def camera_hori(self,angle):
+        rotate = rotate_x(angle)
+        self.forward = self.forward @ rotate
+        self.right = self.right @ rotate
+        self.up = self.up @ rotate
+    
+    def camera_vert(self, angle):
+        rotate = rotate_y(angle)
+        self.forward = self.forward @ rotate
+        self.right = self.right @ rotate
+        self.up = self.up @ rotate
+
 
     def translate_matrix(self):
         x, y, z, w = self.position

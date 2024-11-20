@@ -12,6 +12,7 @@ class SoftwareRender:
         self.screen = pg.display.set_mode(self.RES)
         self.clock = pg.time.Clock()
         self.create_obj()
+        self.image = pg.image.load('space.jpg')
 
     def create_obj(self):
         self.camera = Camera(self, [0.5, 1, -4])
@@ -26,7 +27,9 @@ class SoftwareRender:
 
     def run(self):
         while True:
-            self.draw()
+            self.screen.blit(self.image, (0, 0))
+            self.object.draw()
+            self.camera.control()
             [exit() for i in pg.event.get() if i.type == pg.QUIT]
             pg.display.set_caption(str(self.clock.get_fps()))
             pg.display.flip()
